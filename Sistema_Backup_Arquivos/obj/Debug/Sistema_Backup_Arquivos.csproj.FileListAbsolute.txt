@@ -7,3 +7,12 @@ C:\Users\administrador\source\repos\Sistema_Backup_Arquivos\Sistema_Backup_Arqui
 C:\Users\administrador\source\repos\Sistema_Backup_Arquivos\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csproj.CoreCompileInputs.cache
 C:\Users\administrador\source\repos\Sistema_Backup_Arquivos\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.exe
 C:\Users\administrador\source\repos\Sistema_Backup_Arquivos\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.pdb
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Sistema_Backup_Arquivos.exe.config
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Sistema_Backup_Arquivos.exe
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Sistema_Backup_Arquivos.pdb
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.Form1.resources
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.Properties.Resources.resources
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csproj.GenerateResource.cache
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csproj.CoreCompileInputs.cache
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.exe
+C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.pdb

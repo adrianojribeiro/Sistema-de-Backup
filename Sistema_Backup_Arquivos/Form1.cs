@@ -71,11 +71,16 @@ namespace Sistema_Backup_Arquivos
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var pastaOrigem = Directory.GetCurrentDirectory();
+           // var pastaOrigem = Directory.GetCurrentDirectory();
+
+            var pastaOrigem = @"D:\OneDrive\Diversos\Tecnico Segurança Trabalho\";
+            var raiz_destino = @"D:\teste\";
+
+
             var data_hora_atual = Convert.ToString(DateTime.Now); //converte para string a Data Atual
             var nome_pasta = data_hora_atual.Replace(":", "").Replace("/", "").Replace(" ", "");
             var usuario = SystemInformation.ComputerName;
-            var pastaDestino = @"\\192.168.2.12\Email\" + usuario + " - " + nome_pasta;
+            var pastaDestino = raiz_destino + usuario + " - " + nome_pasta;
             Directory.CreateDirectory(pastaDestino);
             DirectoryCopy(pastaOrigem, pastaDestino, true);
         }
