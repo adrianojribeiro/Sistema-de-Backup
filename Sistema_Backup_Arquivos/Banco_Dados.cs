@@ -80,9 +80,9 @@ namespace Sistema_Backup_Arquivos
             return lista;
         }
 
-        public void Executado(string pc, string pasta, string inicio, string fim,string status)
+        public void Executado(string pc, string pasta, string inicio, string fim,string status,string nome_pasta)
         {
-            string sql = "INSERT INTO executados (computador,pasta,inicio,fim,status) VALUES (@computador,@pasta,@inicio,@fim,@status)";
+            string sql = "INSERT INTO executados (computador,pasta,inicio,fim,status,nome_pasta) VALUES (@computador,@pasta,@inicio,@fim,@status,@nome_pasta)";
 
             using (MySqlConnection con = new MySqlConnection(conecta.endereco))
             {
@@ -95,6 +95,8 @@ namespace Sistema_Backup_Arquivos
                     cmd.Parameters.AddWithValue("@inicio", inicio);
                     cmd.Parameters.AddWithValue("@fim", fim);
                     cmd.Parameters.AddWithValue("@status", status);
+                    cmd.Parameters.AddWithValue("@nome_pasta", nome_pasta);
+
                     cmd.ExecuteNonQuery();                    
 
                 }

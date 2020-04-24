@@ -110,7 +110,7 @@ namespace Sistema_Backup_Arquivos
 
                 data_hora_fim = Convert.ToString(DateTime.Now);
 
-                dados.Executado(usuario,caminho,data_hora_inicio,data_hora_fim,"Ok");
+                dados.Executado(usuario,caminho,data_hora_inicio,data_hora_fim,"Ok",pastaDestino);
             }
         }
 
