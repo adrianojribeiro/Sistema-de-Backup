@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Sistema_Backup_Arquivos
+{
+    public class conexao
+    {
+
+        public String endereco;       
+
+        public conexao()
+        {
+            endereco = "server=192.168.2.12; port=3306;User Id=root;database=backups; password=root;convert zero datetime=True";
+        }
+    }
+}

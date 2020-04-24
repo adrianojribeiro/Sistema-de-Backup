@@ -33,14 +33,13 @@
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblhora = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // backgroundWorker
             // 
-            this.backgroundWorker.WorkerReportsProgress = true;
             this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
-            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
             // 
             // pictureBox
@@ -73,15 +72,27 @@
             this.lblhora.TabIndex = 3;
             this.lblhora.Text = "hora";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 464);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(397, 25);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Pasta Destino : \\\\192.168.2.12\\Backups\\";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 470);
+            this.ClientSize = new System.Drawing.Size(800, 512);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.lblhora);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sistema Backup";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -95,6 +106,7 @@
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblhora;
+        private System.Windows.Forms.Label label2;
     }
 }
 
