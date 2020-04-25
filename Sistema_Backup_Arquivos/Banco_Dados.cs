@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Sistema_Backup_Arquivos
 {
@@ -23,28 +24,43 @@ namespace Sistema_Backup_Arquivos
 
             using (MySqlConnection con = new MySqlConnection(conecta.endereco))
             {
-                con.Open();
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
+                try
                 {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+
+                    con.Open();
+
+                    if (con.State.ToString() == "Open")
                     {
-                        if (reader != null)
+                        using (MySqlCommand cmd = new MySqlCommand(sql, con))
                         {
-                            while (reader.Read())
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
                             {
-                                if (Convert.ToInt32(reader[0].ToString()) > 0)
+                                if (reader != null)
                                 {
-                                    Existe_Rotina = true;
+                                    while (reader.Read())
+                                    {
+                                        if (Convert.ToInt32(reader[0].ToString()) > 0)
+                                        {
+                                            Existe_Rotina = true;
+                                        }
+                                        else
+                                        {
+                                            Existe_Rotina = false;
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    Existe_Rotina = false;
-                                }
+
                             }
+
                         }
-
                     }
-
+                    else
+                    {
+                        MessageBox.Show("Sem conexao com o Servidor");
+                    }
+                }
+                catch {
+                    MessageBox.Show("Conexão com o Servidor não está Disponivel","Erro",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
             }
                 return existe_rotina;
