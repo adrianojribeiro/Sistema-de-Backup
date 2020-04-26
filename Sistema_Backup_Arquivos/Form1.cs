@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Sistema_Backup_Arquivos
 {
@@ -17,7 +18,7 @@ namespace Sistema_Backup_Arquivos
         }
 
         string data_hora_inicio;
-        string data_hora_fim;             
+        string data_hora_fim;
         string pastaOrigem;
 
         long tamanho_total_backup = 0;
@@ -33,8 +34,8 @@ namespace Sistema_Backup_Arquivos
         {
             pictureBox.Visible = false;
             nome_pc = SystemInformation.ComputerName;
-            dados.Checar_Rotina(nome_pc);    
-                     
+            dados.Checar_Rotina(nome_pc);
+
             if (dados.Existe_Rotina == true)
             {
                 lblhora.Text = DateTime.Now.ToString();
@@ -45,14 +46,14 @@ namespace Sistema_Backup_Arquivos
             if (dados.Existe_Rotina == false)
             {
                 this.Close();
-            }    
+            }
 
-        }       
+        }
 
         public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {           
+        {
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-            DirectoryInfo[] dirs = dir.GetDirectories();        
+            DirectoryInfo[] dirs = dir.GetDirectories();
 
             //If the destination directory doesn't exist, create it.
             if (!Directory.Exists(destDirName))
@@ -64,9 +65,9 @@ namespace Sistema_Backup_Arquivos
             FileInfo[] files = dir.GetFiles();
 
             foreach (FileInfo file in files)
-            {            
+            {
                 string temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, true);      
+                file.CopyTo(temppath, true);
             }
 
             // If copying subdirectories, copy them and their contents to new location.
@@ -75,60 +76,67 @@ namespace Sistema_Backup_Arquivos
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);                   
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
                 }
-            }          
-        }              
+            }
+        }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // var raiz_destino = @"\\192.168.2.12\Backups\";            
-
-            var raiz_destino = @"\\Servidor\d\arquivos_teste\";            
-            int tamanho = lista.Count;
-
             try
             {
-                foreach (var caminho in lista)
+                // var raiz_destino = @"\\192.168.2.12\Backups\";            
+
+                var raiz_destino = @"\\Servidor\d\arquivos_teste\";
+                int tamanho = lista.Count;
+
+                try
                 {
-                    DirectoryInfo infoDiretorio = new DirectoryInfo(caminho);
-                    tamanho_total_backup += TamanhoTotalDiretorio(infoDiretorio, true);
+                    foreach (var caminho in lista)
+                    {
+                        DirectoryInfo infoDiretorio = new DirectoryInfo(caminho);
+                        tamanho_total_backup += TamanhoTotalDiretorio(infoDiretorio, true);
+                    }
+                }
+
+                catch (Exception erro)
+                {
+                    MessageBox.Show(erro.Message);
+                }
+
+                try
+                {
+                    int passo = 0;
+
+                    foreach (var caminho in lista)
+                    {
+                        Thread.Sleep(1000);
+                        data_hora_inicio = Convert.ToString(DateTime.Now); //converte para string a Data Atual
+                        var nome_pasta = data_hora_inicio.Replace(":", "").Replace("/", "").Replace(" ", "");
+                        var usuario = SystemInformation.ComputerName;
+
+                        pastaOrigem = caminho; //busca de uma lista localizada no banco de dados
+                        caminho_para_pasta = caminho; // linha reponsavel pela atualizacao do tamanho ja executado
+
+                        var pastaDestino = raiz_destino + usuario + " - " + nome_pasta;
+
+                        Directory.CreateDirectory(pastaDestino);
+                        DirectoryCopy(pastaOrigem, pastaDestino, true);
+                        data_hora_fim = Convert.ToString(DateTime.Now);
+                        dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino);
+
+                        passo += 1;
+                        backgroundWorker.ReportProgress(passo, tamanho);
+                    }
+                }
+                catch (Exception erro)
+                {
+                    MessageBox.Show(erro.ToString());
                 }
             }
-
             catch (Exception erro)
             {
                 MessageBox.Show(erro.Message);
-            }
-            
-            try
-            {
-                int passo = 0;         
-
-                foreach (var caminho in lista)
-                {
-                    Thread.Sleep(1000);
-                    data_hora_inicio = Convert.ToString(DateTime.Now); //converte para string a Data Atual
-                    var nome_pasta = data_hora_inicio.Replace(":", "").Replace("/", "").Replace(" ", "");
-                    var usuario = SystemInformation.ComputerName;
-
-                    pastaOrigem = caminho; //busca de uma lista localizada no banco de dados
-                    caminho_para_pasta = caminho; // linha reponsavel pela atualizacao do tamanho ja executado
-
-                   var pastaDestino = raiz_destino + usuario + " - " + nome_pasta;
-
-                    Directory.CreateDirectory(pastaDestino);
-                    DirectoryCopy(pastaOrigem, pastaDestino, true);
-                    data_hora_fim = Convert.ToString(DateTime.Now);
-                    dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino);
-
-                    passo += 1;
-                    backgroundWorker.ReportProgress(passo, tamanho);
-                }
-            }
-            catch (Exception erro)
-            {
-                MessageBox.Show(erro.ToString());
             }
         }
 
@@ -139,9 +147,10 @@ namespace Sistema_Backup_Arquivos
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {    
+        {
             progressBar.Maximum = Convert.ToInt32(e.UserState);
-            progressBar.Value = e.ProgressPercentage;                       
+
+            progressBar.Value = e.ProgressPercentage;
 
             DirectoryInfo infoDiretorio = new DirectoryInfo(caminho_para_pasta);
             tamanho_ja_copiado += TamanhoTotalDiretorio(infoDiretorio, true);
@@ -149,7 +158,7 @@ namespace Sistema_Backup_Arquivos
             string tamanho_total = FormataExibicaoTamanhoArquivo(tamanho_total_backup);
             string tamanho_atual = FormataExibicaoTamanhoArquivo(tamanho_ja_copiado);
 
-            lblstatustamanho.Text = tamanho_atual + " de " + tamanho_total + " copiados" + " - "+ Convert.ToString(e.ProgressPercentage) + "/" + Convert.ToString(e.UserState) + " (Pastas)"; ;
+            lblstatustamanho.Text = tamanho_atual + " de " + tamanho_total + " copiados" + " - " + Convert.ToString(e.ProgressPercentage) + "/" + Convert.ToString(e.UserState) + " (Pastas)"; ;
 
         }
 
@@ -214,6 +223,7 @@ namespace Sistema_Backup_Arquivos
             return leitura.ToString("0.### ") + sufixo;
         }
     }
+    
 
 }
 

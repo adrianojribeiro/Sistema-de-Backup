@@ -19,49 +19,57 @@ namespace Sistema_Backup_Arquivos
         public bool Checar_Rotina(string nome_pc)
         {
         bool existe_rotina = true;
-
-            string sql = "SELECT COUNT(id_computador) FROM rotinas INNER JOIN computadores ON rotinas.id_computador = computadores.id where nome_computador = '" + nome_pc + "' ";
-
-            using (MySqlConnection con = new MySqlConnection(conecta.endereco))
+            try
             {
-                try
+
+                string sql = "SELECT COUNT(id_computador) FROM rotinas INNER JOIN computadores ON rotinas.id_computador = computadores.id where nome_computador = '" + nome_pc + "' ";
+
+                using (MySqlConnection con = new MySqlConnection(conecta.endereco))
                 {
-
-                    con.Open();
-
-                    if (con.State.ToString() == "Open")
+                    try
                     {
-                        using (MySqlCommand cmd = new MySqlCommand(sql, con))
+
+                        con.Open();
+
+                        if (con.State.ToString() == "Open")
                         {
-                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            using (MySqlCommand cmd = new MySqlCommand(sql, con))
                             {
-                                if (reader != null)
+                                using (MySqlDataReader reader = cmd.ExecuteReader())
                                 {
-                                    while (reader.Read())
+                                    if (reader != null)
                                     {
-                                        if (Convert.ToInt32(reader[0].ToString()) > 0)
+                                        while (reader.Read())
                                         {
-                                            Existe_Rotina = true;
-                                        }
-                                        else
-                                        {
-                                            Existe_Rotina = false;
+                                            if (Convert.ToInt32(reader[0].ToString()) > 0)
+                                            {
+                                                Existe_Rotina = true;
+                                            }
+                                            else
+                                            {
+                                                Existe_Rotina = false;
+                                            }
                                         }
                                     }
+
                                 }
 
                             }
-
+                        }
+                        else
+                        {
+                            MessageBox.Show("Sem conexao com o Servidor");
                         }
                     }
-                    else
+                    catch (Exception erro)
                     {
-                        MessageBox.Show("Sem conexao com o Servidor");
+                        MessageBox.Show(erro.ToString());
                     }
                 }
-                catch {
-                    MessageBox.Show("Conexão com o Servidor não está Disponivel","Erro",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                }
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message);
             }
                 return existe_rotina;
         }
