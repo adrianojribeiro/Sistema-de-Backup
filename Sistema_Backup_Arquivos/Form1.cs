@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -27,11 +28,14 @@ namespace Sistema_Backup_Arquivos
         string caminho_para_pasta = "";
         string nome_pc;
 
+            
+
         Banco_Dados dados = new Banco_Dados();
         List<string> lista = new List<string>();
 
         private void Form1_Load(object sender, EventArgs e)
         {
+                                          
             pictureBox.Visible = false;
             nome_pc = SystemInformation.ComputerName;
             dados.Checar_Rotina(nome_pc);
@@ -85,9 +89,9 @@ namespace Sistema_Backup_Arquivos
         {
             try
             {
-                // var raiz_destino = @"\\192.168.2.12\Backups\";            
+                var raiz_destino = @"\\192.168.2.12\Backups\";            
 
-                var raiz_destino = @"\\Servidor\d\arquivos_teste\";
+               // var raiz_destino = @"\\Servidor\d\arquivos_teste\";
                 int tamanho = lista.Count;
 
                 try
@@ -110,6 +114,7 @@ namespace Sistema_Backup_Arquivos
 
                     foreach (var caminho in lista)
                     {
+                        
                         Thread.Sleep(1000);
                         data_hora_inicio = Convert.ToString(DateTime.Now); //converte para string a Data Atual
                         var nome_pasta = data_hora_inicio.Replace(":", "").Replace("/", "").Replace(" ", "");
@@ -123,10 +128,20 @@ namespace Sistema_Backup_Arquivos
                         Directory.CreateDirectory(pastaDestino);
                         DirectoryCopy(pastaOrigem, pastaDestino, true);
                         data_hora_fim = Convert.ToString(DateTime.Now);
-                        dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino);
-
                         passo += 1;
                         backgroundWorker.ReportProgress(passo, tamanho);
+
+                        Thread.Sleep(1000);
+
+                        DirectoryInfo pasta_atual = new DirectoryInfo(caminho);
+                        long tamanho_pasta_long = TamanhoTotalDiretorio(pasta_atual, true);
+                        string tamanho_pasta = FormataExibicaoTamanhoArquivo(tamanho_pasta_long);
+
+
+
+                        dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino, tamanho_pasta);
+                    
+
                     }
                 }
                 catch (Exception erro)
@@ -156,9 +171,9 @@ namespace Sistema_Backup_Arquivos
             tamanho_ja_copiado += TamanhoTotalDiretorio(infoDiretorio, true);
 
             string tamanho_total = FormataExibicaoTamanhoArquivo(tamanho_total_backup);
-            string tamanho_atual = FormataExibicaoTamanhoArquivo(tamanho_ja_copiado);
+            string tamanho_atual_convertido = FormataExibicaoTamanhoArquivo(tamanho_ja_copiado);
 
-            lblstatustamanho.Text = tamanho_atual + " de " + tamanho_total + " copiados" + " - " + Convert.ToString(e.ProgressPercentage) + "/" + Convert.ToString(e.UserState) + " (Pastas)"; ;
+            lblstatustamanho.Text = tamanho_atual_convertido + " de " + tamanho_total + " copiados" + " - " + Convert.ToString(e.ProgressPercentage) + "/" + Convert.ToString(e.UserState) + " (Pastas)"; ;
 
         }
 

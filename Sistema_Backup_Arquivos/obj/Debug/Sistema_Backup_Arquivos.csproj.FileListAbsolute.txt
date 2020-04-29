@@ -25,7 +25,6 @@ C:\Users\administrador\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bi
 C:\Users\administrador\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\MySql.Data.xml
 C:\Users\administrador\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Renci.SshNet.xml
 C:\Users\administrador\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csproj.CopyComplete
-C:\Users\administrador\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csprojAssemblyReference.cache
 C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Sistema_Backup_Arquivos.exe.config
 C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Sistema_Backup_Arquivos.exe
 C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\bin\Debug\Sistema_Backup_Arquivos.pdb
