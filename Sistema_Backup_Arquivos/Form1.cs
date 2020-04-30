@@ -56,13 +56,16 @@ namespace Sistema_Backup_Arquivos
 
         public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
+
+            
+
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
             DirectoryInfo[] dirs = dir.GetDirectories();
 
             //If the destination directory doesn't exist, create it.
             if (!Directory.Exists(destDirName))
             {
-                Directory.CreateDirectory(destDirName);
+                Directory.CreateDirectory(destDirName);              
             }
 
             // Get the files in the directory and copy them to the new location.
@@ -70,17 +73,17 @@ namespace Sistema_Backup_Arquivos
 
             foreach (FileInfo file in files)
             {
-                string temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, true);
+                string temppath = Path.Combine(destDirName, file.Name);                
+                file.CopyTo(temppath, true);               
             }
-
             // If copying subdirectories, copy them and their contents to new location.
             if (copySubDirs)
             {
                 foreach (DirectoryInfo subdir in dirs)
                 {
-                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    string temppath = Path.Combine(destDirName, subdir.Name);                   
                     DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                  
                 }
             }
         }
@@ -136,8 +139,6 @@ namespace Sistema_Backup_Arquivos
                         DirectoryInfo pasta_atual = new DirectoryInfo(caminho);
                         long tamanho_pasta_long = TamanhoTotalDiretorio(pasta_atual, true);
                         string tamanho_pasta = FormataExibicaoTamanhoArquivo(tamanho_pasta_long);
-
-
 
                         dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino, tamanho_pasta);
                     

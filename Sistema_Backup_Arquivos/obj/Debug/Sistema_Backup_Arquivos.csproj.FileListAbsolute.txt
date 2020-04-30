@@ -44,3 +44,4 @@ C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\
 C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.exe
 C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.pdb
 C:\Users\adria\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csprojAssemblyReference.cache
+C:\Users\administrador\Source\Repos\Sistema-de-Backup\Sistema_Backup_Arquivos\obj\Debug\Sistema_Backup_Arquivos.csprojAssemblyReference.cache
