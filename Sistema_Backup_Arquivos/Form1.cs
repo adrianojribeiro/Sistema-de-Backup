@@ -27,81 +27,36 @@ namespace Sistema_Backup_Arquivos
         long tamanho_ja_copiado = 0;
 
         string caminho_para_pasta = "";
-        string nome_pc;
-
-            
+        string nome_pc;            
 
         Banco_Dados dados = new Banco_Dados();
         List<string> lista = new List<string>();
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            pictureBox.Visible = false;
+            nome_pc = SystemInformation.ComputerName;
+            dados.Checar_Rotina(nome_pc);
 
-
-            string teste = @"\\192.168.2.12\Geral\Planejamento de Produção\Nova Versão";
-
-            Compactar_Pasta(teste);
-            this.Close();
-
-            //pictureBox.Visible = false;
-            //nome_pc = SystemInformation.ComputerName;
-            //dados.Checar_Rotina(nome_pc);
-
-            //if (dados.Existe_Rotina == true)
-            //{
-            //    lblhora.Text = DateTime.Now.ToString();
-            //    pictureBox.Visible = true;
-            //    lista = dados.Lista_Pastas(nome_pc);
-            //    backgroundWorker.RunWorkerAsync();
-            //}
-            //if (dados.Existe_Rotina == false)
-            //{
-            //    this.Close();
-            //}
-
-        }
-
-        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {           
-
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-            DirectoryInfo[] dirs = dir.GetDirectories();
-
-            //If the destination directory doesn't exist, create it.
-            if (!Directory.Exists(destDirName))
+            if (dados.Existe_Rotina == true)
             {
-                Directory.CreateDirectory(destDirName);              
+                lblhora.Text = DateTime.Now.ToString();
+                pictureBox.Visible = true;
+                lista = dados.Lista_Pastas(nome_pc);
+                backgroundWorker.RunWorkerAsync();
             }
-
-            // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-
-            foreach (FileInfo file in files)
+            if (dados.Existe_Rotina == false)
             {
-                string temppath = Path.Combine(destDirName, file.Name);                
-                file.CopyTo(temppath, true);               
+                this.Close();
             }
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copySubDirs)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string temppath = Path.Combine(destDirName, subdir.Name);                   
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
-                  
-                }
-            }
-        }
+        }     
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                var raiz_destino = @"\\192.168.2.12\Backups\";            
-
-               // var raiz_destino = @"\\Servidor\d\arquivos_teste\";
+                var raiz_destino = @"\\192.168.2.12\Backups\";                                      
                 int tamanho = lista.Count;
-
                 try
                 {
                     foreach (var caminho in lista)
@@ -110,19 +65,15 @@ namespace Sistema_Backup_Arquivos
                         tamanho_total_backup += TamanhoTotalDiretorio(infoDiretorio, true);
                     }
                 }
-
                 catch (Exception erro)
                 {
                     MessageBox.Show(erro.Message);
                 }
-
                 try
                 {
                     int passo = 0;
-
                     foreach (var caminho in lista)
-                    {
-                        
+                    {                        
                         Thread.Sleep(1000);
                         data_hora_inicio = Convert.ToString(DateTime.Now); //converte para string a Data Atual
                         var nome_pasta = data_hora_inicio.Replace(":", "").Replace("/", "").Replace(" ", "");
@@ -131,10 +82,9 @@ namespace Sistema_Backup_Arquivos
                         pastaOrigem = caminho; //busca de uma lista localizada no banco de dados
                         caminho_para_pasta = caminho; // linha reponsavel pela atualizacao do tamanho ja executado
 
-                        var pastaDestino = raiz_destino + usuario + " - " + nome_pasta;
-
-                        Directory.CreateDirectory(pastaDestino);
-                        DirectoryCopy(pastaOrigem, pastaDestino, true);
+                        var pastaDestino = raiz_destino + usuario + " - " + nome_pasta; 
+                                               
+                        Compactar_Pasta(pastaOrigem,pastaDestino + ".zip");
                         data_hora_fim = Convert.ToString(DateTime.Now);
                         passo += 1;
                         backgroundWorker.ReportProgress(passo, tamanho);
@@ -144,10 +94,8 @@ namespace Sistema_Backup_Arquivos
                         DirectoryInfo pasta_atual = new DirectoryInfo(caminho);
                         long tamanho_pasta_long = TamanhoTotalDiretorio(pasta_atual, true);
                         string tamanho_pasta = FormataExibicaoTamanhoArquivo(tamanho_pasta_long);
-
-                        dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino, tamanho_pasta);
+                        dados.Executado(usuario, caminho, data_hora_inicio, data_hora_fim, "Ok", pastaDestino + ".zip", tamanho_pasta);
                     
-
                     }
                 }
                 catch (Exception erro)
@@ -170,7 +118,6 @@ namespace Sistema_Backup_Arquivos
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar.Maximum = Convert.ToInt32(e.UserState);
-
             progressBar.Value = e.ProgressPercentage;
 
             DirectoryInfo infoDiretorio = new DirectoryInfo(caminho_para_pasta);
@@ -244,12 +191,10 @@ namespace Sistema_Backup_Arquivos
             return leitura.ToString("0.### ") + sufixo;
         }
 
-        public void Compactar_Pasta(string origem)
-        {
+        public void Compactar_Pasta(string origem,string destino)
+        {           
 
-            string destino = @"F:\teste\adriano.zip";
-
-            ZipFile.CreateFromDirectory(origem, destino);
+            ZipFile.CreateFromDirectory(origem, destino, CompressionLevel.NoCompression, true);
 
 
         }
