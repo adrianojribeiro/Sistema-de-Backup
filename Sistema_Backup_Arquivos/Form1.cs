@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -35,29 +36,33 @@ namespace Sistema_Backup_Arquivos
 
         private void Form1_Load(object sender, EventArgs e)
         {
-                                          
-            pictureBox.Visible = false;
-            nome_pc = SystemInformation.ComputerName;
-            dados.Checar_Rotina(nome_pc);
 
-            if (dados.Existe_Rotina == true)
-            {
-                lblhora.Text = DateTime.Now.ToString();
-                pictureBox.Visible = true;
-                lista = dados.Lista_Pastas(nome_pc);
-                backgroundWorker.RunWorkerAsync();
-            }
-            if (dados.Existe_Rotina == false)
-            {
-                this.Close();
-            }
+
+            string teste = @"\\192.168.2.12\Geral\Planejamento de Produção\Nova Versão";
+
+            Compactar_Pasta(teste);
+            this.Close();
+
+            //pictureBox.Visible = false;
+            //nome_pc = SystemInformation.ComputerName;
+            //dados.Checar_Rotina(nome_pc);
+
+            //if (dados.Existe_Rotina == true)
+            //{
+            //    lblhora.Text = DateTime.Now.ToString();
+            //    pictureBox.Visible = true;
+            //    lista = dados.Lista_Pastas(nome_pc);
+            //    backgroundWorker.RunWorkerAsync();
+            //}
+            //if (dados.Existe_Rotina == false)
+            //{
+            //    this.Close();
+            //}
 
         }
 
         public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {
-
-            
+        {           
 
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
             DirectoryInfo[] dirs = dir.GetDirectories();
@@ -238,6 +243,19 @@ namespace Sistema_Backup_Arquivos
             // retorna o número formatado com sufixo
             return leitura.ToString("0.### ") + sufixo;
         }
+
+        public void Compactar_Pasta(string origem)
+        {
+
+            string destino = @"F:\teste\adriano.zip";
+
+            ZipFile.CreateFromDirectory(origem, destino);
+
+
+        }
+                     
+
+
     }
     
 
